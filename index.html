@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <title>No. of people from region in census</title>
 
+    <link rel="stylesheet/less" type="text/css" href="styles.less" />
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
-
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.0.2/less.min.js" ></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
 </head>
 <body>
 
 
 
 
+
+
 <script type="text/javascript" src="main.js"></script>
 
-
-<p>The dataset contains a random sample of 1% of people in the 2011 Census output database for England and Wales. It
-    includes records of 569,741 individuals.</p>
-
+<div class="toggle">
+    <div class="toggle-label toggle-label-off">Option A</div>
+    <div class="toggle-switch"></div>
+    <div class="toggle-label toggle-label-on">Option B</div>
+</div>
 
 <p>
     <a href="https://github.com/hwhh/CMPS165-Geojson">Github Link</a> <br>

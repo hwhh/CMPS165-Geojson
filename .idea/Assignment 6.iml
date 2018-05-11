@@ -12,5 +12,8 @@
     <orderEntry type="library" name="@types/jquery" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
     <orderEntry type="library" name="d3-legend" level="application" />
+    <orderEntry type="library" name="less" level="application" />
+    <orderEntry type="library" name="topojson.v2" level="application" />
+    <orderEntry type="library" name="d3-scale-chromatic.v1" level="application" />
   </component>
 </module>
