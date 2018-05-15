@@ -6,18 +6,26 @@ let dataSetFlag = 0;
 let width = 960,
     height = 500;
 
-let locationNames = [
-    {key: "E12000001", name: "NORTH EAST"},
-    {key: "E12000002", name: "NORTH WEST"},
-    {key: "E12000003", name: "YORKSHIRE AND THE HUMBER"},
-    {key: "E12000004", name: "EAST MIDLANDS"},
-    {key: "E12000005", name: "WEST MIDLANDS"},
-    {key: "E12000006", name: "EAST"},
-    {key: "E12000007", name: "LONDON"},
-    {key: "E12000008", name: "SOUTH EAST"},
-    {key: "E12000009", name: "SOUTH WEST"},
-    {key: "W92000004", name: "WALES"}
-];
+let locationNames = {
+    "E12000001": {name: "NORTH EAST"},
+    "E12000002": {name: "NORTH WEST"},
+    "E12000003": {name: "YORKSHIRE AND THE HUMBER"},
+    "E12000004": {name: "EAST MIDLANDS"},
+    "E12000005": {name: "WEST MIDLANDS"},
+    "E12000006": {name: "EAST"},
+    "E12000007": {name: "LONDON"},
+    "E12000008": {name: "SOUTH EAST"},
+    "E12000009": {name: "SOUTH WEST"},
+    "W92000004": {name: "WALES"}
+};
+
+d3.select('#h1').style('display', 'block');
+d3.select('#h2').style('display', 'none');
+
+
+//Defines the tooltip which is appended to its own div within the DOM
+const tooltip = d3.select('body').append('div')
+    .attr('class', 'hidden tooltip');
 
 
 const projection = d3.geoAlbers()
@@ -137,8 +145,10 @@ $(function () {
                 .tickValues(color2.domain()))
                 .select(".domain")
                 .remove();
-            d3.select('svg').select('#countries1').transition().duration(1000).style('opacity', 0);
-            d3.select('svg').select('#countries2').transition().duration(1000).style('opacity', 1);
+            d3.select('#h1').style('display', 'none');
+            d3.select('#h2').style('display', 'block');
+            d3.select('svg').select('#countries1').transition().duration(1000).style('display', 'none');
+            d3.select('svg').select('#countries2').transition().duration(1000).style('display', 'block');
 
             // d3.select('svg').select('.key').selectAll('#legend1').style('opacity', 0);
             // d3.select('svg').select('.key').selectAll('#legend2').style('opacity', 1);
@@ -149,8 +159,10 @@ $(function () {
                 .tickValues(color1.domain()))
                 .select(".domain")
                 .remove();
-            d3.select('svg').select('#countries1').transition().duration(1000).style('opacity', 1);
-            d3.select('svg').select('#countries2').transition().duration(1000).style('opacity', 0);
+            d3.select('#h1').style('display', 'block');
+            d3.select('#h2').style('display', 'none');
+            d3.select('svg').select('#countries1').transition().duration(1000).style('display', 'block');
+            d3.select('svg').select('#countries2').transition().duration(1000).style('display', 'none');
             //
             // d3.select('svg').select('.key').selectAll('#legend1').style('opacity', 1);
             // d3.select('svg').select('.key').selectAll('#legend2').style('opacity', 0);
@@ -188,29 +200,54 @@ function renderMap() {
         svg.append('g')
             .attr('id', 'countries1')
             .attr('class', 'countries')
-            .style('opacity', 1)
+            .style('display', 'block')
             .selectAll('path')
             .data(features)
             .enter().append('path')
             .attr('d', path)
+            .on('mousemove', function (d) { //Mouse moving over a circle activates the tooltip
+                d3.select(this).style('fill', 'orange');
+                tooltip.classed('hidden', false) //Change the tool top from hidden to visible
+                    .attr('style', 'left:' + (d3.event.clientX + 20) + 'px; top:' + (d3.event.clientY - 20) + 'px')
+                    //This defines what is in the tool top
+                    .html(locationNames[d.properties.region_code].name)
+            })
+            .on('mouseout', function (d) {//Mouse moving off a circle hides the tooltip
+                d3.select(this).style('fill', color1(dataSet1.get(d.properties.region_code)));
+                tooltip.classed('hidden', true);
+            })
             .attr('vector-effect', 'non-scaling-stroke')
             .style('fill', function (d) {
                 return color1(dataSet1.get(d.properties.region_code))
             });
+
+
         svg.append('g')
             .attr('id', 'countries2')
             .attr('class', 'countries')
-            .style('opacity', 0)
+            .style('display', 'none')
             .selectAll('path')
             .data(features)
             .enter().append('path')
             .attr('d', path)
+            .on('mousemove', function (d) { //Mouse moving over a circle activates the tooltip
+                d3.select(this).style('fill', 'orange');
+                tooltip.classed('hidden', false) //Change the tool top from hidden to visible
+                    .attr('style', 'left:' + (d3.event.clientX + 20) + 'px; top:' + (d3.event.clientY - 20) + 'px')
+                    //This defines what is in the tool top
+                    .html(locationNames[d.properties.region_code].name)
+            })
+            .on('mouseout', function (d) {//Mouse moving off a circle hides the tooltip
+                d3.select(this).style('fill', color2(dataSet2.get(d.properties.region_code)));
+                tooltip.classed('hidden', true);
+            })
             .attr('vector-effect', 'non-scaling-stroke')
             .style('fill', function (d) {
                 return color2(dataSet2.get(d.properties.region_code))
             });
     });
 }
+
 
 Promise.all([loadDataSet1, loadDataSet2]).then(values => {
     renderMap();
