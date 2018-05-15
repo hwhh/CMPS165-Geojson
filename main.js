@@ -6,6 +6,19 @@ let dataSetFlag = 0;
 let width = 960,
     height = 500;
 
+let locationNames = [
+    {key: "E12000001", name: "NORTH EAST"},
+    {key: "E12000002", name: "NORTH WEST"},
+    {key: "E12000003", name: "YORKSHIRE AND THE HUMBER"},
+    {key: "E12000004", name: "EAST MIDLANDS"},
+    {key: "E12000005", name: "WEST MIDLANDS"},
+    {key: "E12000006", name: "EAST"},
+    {key: "E12000007", name: "LONDON"},
+    {key: "E12000008", name: "SOUTH EAST"},
+    {key: "E12000009", name: "SOUTH WEST"},
+    {key: "W92000004", name: "WALES"}
+];
+
 
 const projection = d3.geoAlbers()
     .center([0.7, 52.958])
@@ -64,7 +77,7 @@ function createLegend1() {
         })
         .attr('fill', function (d) {
             return color1(d[0]);
-        })
+        });
 
     g.append('text')
         .attr('id', 'legend1')
